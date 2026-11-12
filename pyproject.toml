@@ -1,0 +1,79 @@
+[project]
+name = "rag-thesis-support"
+version = "0.1.0"
+description = "Citation-grounded RAG assistant for thesis supervision at ASOIU"
+requires-python = ">=3.12"
+dependencies = [
+    "certifi>=2026.7.22",
+    "docx2txt>=0.9",
+    "langchain>=1.4.0",
+    "langchain-classic>=1.0.8",
+    "langchain-community>=0.4.2",
+    "langchain-core>=1.6.2",
+    "langchain-deepseek>=1.1.0",
+    "langchain-openai>=1.0.0",
+    "langchain-pinecone>=0.2.13",
+    "openai>=3.8.0",
+    "prometheus-client>=0.26.0",
+    "pymupdf>=1.28.2",
+    "pypdf>=6.17.0",
+    "python-docx>=1.2.0",
+    "python-dotenv>=1.2.3",
+    "python-telegram-bot>=22.8",
+    "streamlit>=1.63.0",
+    "tavily>=1.1.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "mypy>=2.4.1",
+    "pre-commit>=4.7.0",
+    "pytest>=8.0",
+    "pytest-cov>=7.1.0",
+    "ruff>=0.6",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/thesis_assistant"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+ignore = ["E501", "UP006", "UP035", "UP045"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["E402"]  # importorskip must run before the module import  # long prompt strings; keep typing.List style
+
+[tool.mypy]
+python_version = "3.12"
+mypy_path = "src"
+packages = ["thesis_assistant"]
+ignore_missing_imports = true
+warn_unused_ignores = true
+check_untyped_defs = true
+
+[tool.coverage.run]
+source = ["src/thesis_assistant"]
+omit = ["*/web_app.py", "*/ingestion.py", "*/console.py"]  # UI script and network pipeline
+
+[tool.coverage.report]
+fail_under = 70
+show_missing = true
+
+[[tool.mypy.overrides]]
+# python-telegram-bot types Update fields as Optional, but the handler filters
+# guarantee they are present for the updates each handler receives.
+module = "thesis_assistant.telegram_bot"
+disable_error_code = ["union-attr"]

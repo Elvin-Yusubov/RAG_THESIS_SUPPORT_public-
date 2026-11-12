@@ -1,0 +1,32 @@
+# Web app and Telegram bot share one image and one state volume.
+# Usage:  docker compose up -d --build
+#         docker compose run --rm ingest        # build / update the index
+x-app: &app
+  build: .
+  env_file: .env
+  volumes:
+    - state:/app/state
+
+services:
+  web:
+    <<: *app
+    ports:
+      - "8501:8501"
+    restart: unless-stopped
+
+  bot:
+    <<: *app
+    command: ["python", "-m", "thesis_assistant.telegram_bot"]
+    restart: unless-stopped
+
+  ingest:
+    <<: *app
+    command: ["python", "-m", "thesis_assistant.ingestion"]
+    volumes:
+      - state:/app/state
+      - ./DB_ASOIU:/app/DB_ASOIU:ro
+      - ./ingestion_manifest.json:/app/ingestion_manifest.json
+    profiles: ["tools"]
+
+volumes:
+  state:

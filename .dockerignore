@@ -1,0 +1,14 @@
+.git
+.venv
+.env
+.env.*
+!.env.example
+DB_ASOIU
+state
+tests
+evaluation
+__pycache__
+*.pyc
+.pytest_cache
+.ruff_cache
+ingestion_manifest.json

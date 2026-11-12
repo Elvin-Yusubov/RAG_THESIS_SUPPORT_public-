@@ -1,0 +1,40 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+**/.env
+**/.env.local
+**/.env.*.local
+**/.env.development
+**/.env.development.local
+**/.env.production
+**/.env.production.local
+**/.env.test
+**/.env.test.local
+**/.env.staging
+**/.env.staging.local
+
+# Large binary documents (keep out of git)
+*.docx
+*.pdf
+*.zip
+
+# Local run artifacts (contain machine-specific paths)
+ingestion_manifest.json
+/DB_ASOIU/
+/state/
+*.log
+.pytest_cache/
+.ruff_cache/
+.env.example.local
+
+# Private modules (kept out of the public repository)
+src/thesis_assistant/prompts.py
+src/thesis_assistant/ingestion.py
+src/thesis_assistant/telegram_bot.py
